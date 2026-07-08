@@ -1,10 +1,8 @@
 # claude-usage-tray
 
-Windows system tray icon (near volume/mic/network) showing your Claude Code
-**5-hour window usage %** — updates on its own, no need to open Claude Code
-to check.
+A Windows tray icon that shows your Claude Code 5-hour usage percentage. It updates on its own. You never open Claude Code just to check a number.
 
-Green <70%, orange 70-89%, red ≥90%. Hover: shows exact % and reset time.
+Green under 70%. Orange from 70 to 89%. Red at 90% or above. Hover over it to see the exact percentage and when it resets.
 
 🇧🇷 [Leia em português abaixo](#-português)
 
@@ -12,26 +10,24 @@ Green <70%, orange 70-89%, red ≥90%. Hover: shows exact % and reset time.
 
 - Windows
 - [Claude Code](https://claude.com/claude-code) installed
-- [claude-hud](https://github.com/jarrodwatts/claude-hud) plugin installed and active
-  (inside Claude Code: `/plugin marketplace add jarrodwatts/claude-hud` then
-  `/plugin install claude-hud@claude-hud`)
+- [claude-hud](https://github.com/jarrodwatts/claude-hud) plugin installed and active. Inside Claude Code, run `/plugin marketplace add jarrodwatts/claude-hud`, then `/plugin install claude-hud@claude-hud`.
 
 ## Install
 
-Download/clone this repo, open PowerShell in it and run:
+Clone this repo, open PowerShell in it, and run:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
 
-This will:
-1. Copy `scripts/taskbar-usage.ps1` to `%USERPROFILE%\.claude\scripts\`
-2. Enable `externalUsageWritePath` in the claude-hud config (without touching the rest of your config)
-3. Register the icon to auto-start on login (Windows Startup folder)
-4. Start the icon right away
+The script does four things:
 
-Doesn't touch any credentials — only reads the snapshot file that claude-hud
-already writes locally.
+1. Copies `scripts/taskbar-usage.ps1` into `%USERPROFILE%\.claude\scripts\`
+2. Turns on `externalUsageWritePath` in the claude-hud config, without touching the rest of your settings
+3. Registers the icon to start on login, through the Windows Startup folder
+4. Starts the icon immediately
+
+It never touches your credentials. It only reads the snapshot file that claude-hud already writes locally.
 
 ## Uninstall
 
@@ -39,60 +35,49 @@ already writes locally.
 powershell -ExecutionPolicy Bypass -File uninstall.ps1
 ```
 
-## Prefer asking an AI to do it
+## Let an AI do it for you
 
-Instead of running `install.ps1`, you can point any Claude Code instance
-(or other coding agent) at this repo and ask something like:
+Point any Claude Code instance, or another coding agent, at this repo and ask something like:
 
-> "read the README.md and install.ps1 of this repo and replicate the install here"
+> "Read the README.md and install.ps1 of this repo, then replicate the install here."
 
-`install.ps1` is idempotent and commented enough for an agent to follow the
-same steps manually if it prefers (copy script, edit claude-hud's config.json,
-generate the .vbs, place it in the Startup folder).
+`install.ps1` is idempotent and commented enough for an agent to follow the same steps by hand: copy the script, edit claude-hud's config.json, generate the .vbs launcher, drop it in the Startup folder.
 
 ## Limitations
 
-- Only shows up in the tray of the **primary monitor** — this is a Windows
-  limitation (no tray icon duplicates on a secondary monitor, not even native ones).
-- Only updates while a Claude Code session is running (it's the only source
-  of rate-limit data). After 15min with no active session, the icon shows
-  "-" (no data).
+- The icon only shows on the **primary monitor**. That's a Windows limit. No tray icon duplicates onto a second monitor, not even the native ones.
+- The icon only updates while a Claude Code session runs, since that session is the only source for rate-limit data. After 15 minutes with no active session, it shows "-" for no data.
 
 ---
 
 ## 🇧🇷 Português
 
-Ícone na bandeja do Windows (perto de volume/mic/rede) mostrando o **% de uso
-da janela de 5h** do seu plano Claude Code — atualiza sozinho, sem precisar
-abrir o Claude Code pra ver.
+Um ícone na bandeja do Windows que mostra o percentual de uso da sua janela de 5 horas no Claude Code. Ele atualiza sozinho. Você nunca precisa abrir o Claude Code só pra conferir um número.
 
-Verde <70%, laranja 70-89%, vermelho ≥90%. Passa o mouse: mostra % exato e
-quando reseta.
+Verde abaixo de 70%. Laranja entre 70% e 89%. Vermelho a partir de 90%. Passe o mouse por cima pra ver o percentual exato e quando ele reseta.
 
 ### Pré-requisitos
 
 - Windows
 - [Claude Code](https://claude.com/claude-code) instalado
-- Plugin [claude-hud](https://github.com/jarrodwatts/claude-hud) instalado e ativo
-  (dentro do Claude Code: `/plugin marketplace add jarrodwatts/claude-hud` depois
-  `/plugin install claude-hud@claude-hud`)
+- Plugin [claude-hud](https://github.com/jarrodwatts/claude-hud) instalado e ativo. Dentro do Claude Code, roda `/plugin marketplace add jarrodwatts/claude-hud`, depois `/plugin install claude-hud@claude-hud`.
 
 ### Instalar
 
-Baixa/clona este repo, abre PowerShell nele e roda:
+Clona este repo, abre PowerShell nele e roda:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File install.ps1
 ```
 
-Isso:
-1. Copia `scripts/taskbar-usage.ps1` pra `%USERPROFILE%\.claude\scripts\`
-2. Liga `externalUsageWritePath` no config do claude-hud (sem mexer no resto do seu config)
-3. Registra o ícone pra abrir sozinho no login (pasta Startup do Windows)
-4. Sobe o ícone agora mesmo
+O script faz quatro coisas:
 
-Não mexe em nenhuma credencial — só lê o arquivo de snapshot que o claude-hud
-já escreve localmente.
+1. Copia `scripts/taskbar-usage.ps1` pra `%USERPROFILE%\.claude\scripts\`
+2. Liga `externalUsageWritePath` no config do claude-hud, sem mexer no resto das suas configurações
+3. Registra o ícone pra abrir no login, pela pasta Startup do Windows
+4. Sobe o ícone na hora
+
+Ele não mexe em nenhuma credencial. Só lê o arquivo de snapshot que o claude-hud já escreve localmente.
 
 ### Desinstalar
 
@@ -100,21 +85,15 @@ já escreve localmente.
 powershell -ExecutionPolicy Bypass -File uninstall.ps1
 ```
 
-### Se preferir pedir pra uma IA fazer
+### Deixa uma IA fazer por você
 
-Em vez de rodar o `install.ps1`, dá pra apontar qualquer instância de Claude
-Code (ou outro agente coding) pra este repo e pedir algo como:
+Aponta qualquer instância de Claude Code, ou outro agente coding, pra este repo e pede algo como:
 
-> "lê o README.md e o install.ps1 desse repo e replica a instalação aqui"
+> "Lê o README.md e o install.ps1 desse repo e replica a instalação aqui."
 
-O `install.ps1` é idempotente e comentado o bastante pra um agente seguir os
-mesmos passos manualmente se preferir (copiar script, editar config.json do
-claude-hud, gerar o .vbs, colocar na pasta Startup).
+O `install.ps1` é idempotente e comentado o bastante pra um agente seguir os mesmos passos na mão: copiar o script, editar o config.json do claude-hud, gerar o launcher .vbs, colocar na pasta Startup.
 
 ### Limitações
 
-- Só aparece na bandeja do **monitor principal** — é limitação do Windows
-  (nenhum ícone de bandeja duplica em monitor secundário, nem os nativos).
-- Só atualiza enquanto alguma sessão do Claude Code estiver rodando (é a
-  única fonte do dado de rate-limit). Depois de 15min sem sessão ativa, o
-  ícone mostra "-" (sem dado).
+- O ícone só aparece no **monitor principal**. É limitação do Windows. Nenhum ícone de bandeja duplica num segundo monitor, nem os nativos.
+- O ícone só atualiza enquanto uma sessão do Claude Code roda, já que essa sessão é a única fonte do dado de rate-limit. Depois de 15 minutos sem sessão ativa, ele mostra "-" por falta de dado.
