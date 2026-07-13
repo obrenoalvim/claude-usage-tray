@@ -9,8 +9,15 @@ Green under 70%. Orange from 70 to 89%. Red at 90% or above. Hover over it to se
 ## Requirements
 
 - Windows
-- [Claude Code](https://claude.com/claude-code) installed
-- [claude-hud](https://github.com/jarrodwatts/claude-hud) plugin installed and active. Inside Claude Code, run `/plugin marketplace add jarrodwatts/claude-hud`, then `/plugin install claude-hud@claude-hud`.
+- [Claude Code](https://claude.com/claude-code) installed, logged in with a **Pro or Max subscription** (API-key-only accounts don't get rate-limit data, so the tray will never show a number)
+- [claude-hud](https://github.com/jarrodwatts/claude-hud) plugin installed **and set up as your statusline**. Installing the plugin alone is not enough. Inside Claude Code, run in order:
+  1. `/plugin marketplace add jarrodwatts/claude-hud`
+  2. `/plugin install claude-hud@claude-hud`
+  3. `/reload-plugins`
+  4. `/claude-hud:setup`
+  5. Restart Claude Code fully (not just reload) so it picks up the new statusline config
+
+  See the [claude-hud README](https://github.com/jarrodwatts/claude-hud#readme) if any step fails.
 
 ## Install
 
@@ -59,8 +66,15 @@ Verde abaixo de 70%. Laranja entre 70% e 89%. Vermelho a partir de 90%. Passe o 
 ### Pré-requisitos
 
 - Windows
-- [Claude Code](https://claude.com/claude-code) instalado
-- Plugin [claude-hud](https://github.com/jarrodwatts/claude-hud) instalado e ativo. Dentro do Claude Code, roda `/plugin marketplace add jarrodwatts/claude-hud`, depois `/plugin install claude-hud@claude-hud`.
+- [Claude Code](https://claude.com/claude-code) instalado, logado com assinatura **Pro ou Max** (conta só com API key não recebe dado de rate-limit, então o ícone nunca vai mostrar número)
+- Plugin [claude-hud](https://github.com/jarrodwatts/claude-hud) instalado **e configurado como sua statusline**. Só instalar o plugin não basta. Dentro do Claude Code, roda nessa ordem:
+  1. `/plugin marketplace add jarrodwatts/claude-hud`
+  2. `/plugin install claude-hud@claude-hud`
+  3. `/reload-plugins`
+  4. `/claude-hud:setup`
+  5. Reinicia o Claude Code por completo (não só reload) pra ele pegar a config nova de statusline
+
+  Se algum passo falhar, olha o [README do claude-hud](https://github.com/jarrodwatts/claude-hud#readme).
 
 ### Instalar
 
