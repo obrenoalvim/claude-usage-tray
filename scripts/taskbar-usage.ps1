@@ -3,6 +3,15 @@ $claudeConfigDir = if ($env:CLAUDE_CONFIG_DIR) { $env:CLAUDE_CONFIG_DIR } else {
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
+# GetHicon() hands back a raw HICON that Icon.FromHandle() does not own, so
+# .Dispose() never frees it. Without an explicit DestroyIcon, every 5s tick
+# leaks a GDI handle until the process hits Windows' 10000-per-process cap
+# and the tray icon freezes on whatever was last drawn.
+Add-Type -Namespace ClaudeUsageTray -Name NativeMethods -MemberDefinition '
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    public static extern bool DestroyIcon(System.IntPtr hIcon);
+'
+
 $script:snapshotPath = Join-Path $claudeConfigDir "cache\usage-snapshot.json"
 $script:freshnessMs  = 15 * 60 * 1000   # ignore snapshot older than 15 min
 
@@ -34,9 +43,24 @@ function New-PercentIcon {
     return $icon
 }
 
+function Set-TrayIcon {
+    param(
+        [string]$Text,
+        [System.Drawing.Color]$BgColor,
+        [string]$TooltipText
+    )
+    $oldIcon = $script:trayIcon.Icon
+    $script:trayIcon.Icon = New-PercentIcon -Text $Text -BgColor $BgColor
+    $script:trayIcon.Text = $TooltipText
+    if ($oldIcon) {
+        $oldHandle = $oldIcon.Handle
+        $oldIcon.Dispose()
+        [ClaudeUsageTray.NativeMethods]::DestroyIcon($oldHandle) | Out-Null
+    }
+}
+
 $script:trayIcon = New-Object System.Windows.Forms.NotifyIcon
-$script:trayIcon.Icon = New-PercentIcon -Text "?" -BgColor ([System.Drawing.Color]::Gray)
-$script:trayIcon.Text = "Claude - 5h usage"
+Set-TrayIcon -Text "?" -BgColor ([System.Drawing.Color]::Gray) -TooltipText "Claude - 5h usage"
 $script:trayIcon.Visible = $true
 
 $menu = New-Object System.Windows.Forms.ContextMenuStrip
@@ -50,8 +74,7 @@ $script:trayIcon.ContextMenuStrip = $menu
 
 function Update-Usage {
     if (-not (Test-Path $script:snapshotPath)) {
-        $script:trayIcon.Icon = New-PercentIcon -Text "-" -BgColor ([System.Drawing.Color]::Gray)
-        $script:trayIcon.Text = "Claude - 5h usage: sem dado"
+        Set-TrayIcon -Text "-" -BgColor ([System.Drawing.Color]::Gray) -TooltipText "Claude - 5h usage: sem dado"
         return
     }
     try {
@@ -61,8 +84,7 @@ function Update-Usage {
         $pct = $json.five_hour.used_percentage
 
         if (($nowMs - $updatedAt) -gt $script:freshnessMs -or $null -eq $pct) {
-            $script:trayIcon.Icon = New-PercentIcon -Text "-" -BgColor ([System.Drawing.Color]::Gray)
-            $script:trayIcon.Text = "Claude - 5h usage: sem dado"
+            Set-TrayIcon -Text "-" -BgColor ([System.Drawing.Color]::Gray) -TooltipText "Claude - 5h usage: sem dado"
             return
         }
 
@@ -80,11 +102,9 @@ function Update-Usage {
             }
         }
 
-        $script:trayIcon.Icon = New-PercentIcon -Text "$pct" -BgColor $color
-        $script:trayIcon.Text = "Claude - 5h usage: $pct%$resetInfo"
+        Set-TrayIcon -Text "$pct" -BgColor $color -TooltipText "Claude - 5h usage: $pct%$resetInfo"
     } catch {
-        $script:trayIcon.Icon = New-PercentIcon -Text "!" -BgColor ([System.Drawing.Color]::Gray)
-        $script:trayIcon.Text = "Claude - 5h usage: erro lendo dado"
+        Set-TrayIcon -Text "!" -BgColor ([System.Drawing.Color]::Gray) -TooltipText "Claude - 5h usage: erro lendo dado"
     }
 }
 
