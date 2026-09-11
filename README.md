@@ -2,7 +2,11 @@
 
 A Windows tray icon that shows your Claude Code 5-hour usage percentage. It updates on its own. You never open Claude Code just to check a number.
 
-Green under 70%. Orange from 70 to 89%. Red at 90% or above. Hover over it to see the exact percentage and when it resets.
+Green under 70%. Orange from 70 to 89%. Red at 90% or above. Hover over it to see the exact percentage, when it resets, and your 7-day (weekly) usage.
+
+The tray also watches your weekly consumption rate. If you're burning through it fast enough that you'll hit 100% **before** the natural weekly reset, the icon turns red early and the tooltip shows an estimated time to exhaustion - so you find out before you're stuck on a degraded model mid-task, not after.
+
+Right-click the icon to switch between **Português** and **English**. The choice is saved and survives restarts.
 
 🇧🇷 [Leia em português abaixo](#-português)
 
@@ -53,7 +57,7 @@ Point any Claude Code instance, or another coding agent, at this repo and ask so
 ## Limitations
 
 - The icon only shows on the **primary monitor**. That's a Windows limit. No tray icon duplicates onto a second monitor, not even the native ones.
-- The icon only updates while a Claude Code session runs, since that session is the only source for rate-limit data. After 15 minutes with no active session, it shows "-" for no data.
+- The icon only updates while a Claude Code session runs, since that session is the only source for rate-limit data. After 15 minutes with no active session, it shows the last known percentage in gray, marked as stale in the tooltip. It only falls back to "-" if it has never had a reading yet.
 
 ---
 
@@ -61,7 +65,11 @@ Point any Claude Code instance, or another coding agent, at this repo and ask so
 
 Um ícone na bandeja do Windows que mostra o percentual de uso da sua janela de 5 horas no Claude Code. Ele atualiza sozinho. Você nunca precisa abrir o Claude Code só pra conferir um número.
 
-Verde abaixo de 70%. Laranja entre 70% e 89%. Vermelho a partir de 90%. Passe o mouse por cima pra ver o percentual exato e quando ele reseta.
+Verde abaixo de 70%. Laranja entre 70% e 89%. Vermelho a partir de 90%. Passe o mouse por cima pra ver o percentual exato, quando ele reseta, e o uso da janela semanal (7 dias).
+
+O ícone também acompanha a taxa de consumo semanal. Se o ritmo atual vai bater 100% **antes** do reset semanal natural, o ícone fica vermelho antes da hora e o tooltip mostra uma estimativa de quanto tempo falta pra esgotar - assim você descobre antes de ficar preso num modelo degradado no meio de uma tarefa, não depois.
+
+Clica com o botão direito no ícone pra alternar entre **Português** e **English**. A escolha fica salva e sobrevive a reinícios.
 
 ### Pré-requisitos
 
@@ -110,4 +118,4 @@ O `install.ps1` é idempotente e comentado o bastante pra um agente seguir os me
 ### Limitações
 
 - O ícone só aparece no **monitor principal**. É limitação do Windows. Nenhum ícone de bandeja duplica num segundo monitor, nem os nativos.
-- O ícone só atualiza enquanto uma sessão do Claude Code roda, já que essa sessão é a única fonte do dado de rate-limit. Depois de 15 minutos sem sessão ativa, ele mostra "-" por falta de dado.
+- O ícone só atualiza enquanto uma sessão do Claude Code roda, já que essa sessão é a única fonte do dado de rate-limit. Depois de 15 minutos sem sessão ativa, ele mostra o último percentual conhecido em cinza, marcado como antigo no tooltip. Só cai pro "-" se nunca teve nenhuma leitura.
