@@ -189,6 +189,13 @@ function Get-RiskColor {
     return [System.Drawing.Color]::SeaGreen
 }
 
+function Get-RiskRank {
+    param([System.Drawing.Color]$Color)
+    if ($Color -eq [System.Drawing.Color]::Crimson) { return 2 }
+    if ($Color -eq [System.Drawing.Color]::DarkOrange) { return 1 }
+    return 0
+}
+
 # ponytail: taxa de consumo semanal calculada a partir de amostras em memoria
 # (perde o historico se a bandeja reiniciar - ~15-20min pra taxa ficar confiavel
 # de novo). Persistir em arquivo se isso incomodar na pratica.
@@ -281,7 +288,8 @@ function Update-Usage {
         $weeklyPct = $json.seven_day.used_percentage
         if ($null -ne $weeklyPct) {
             $weeklyPct = [int]$weeklyPct
-            $color = if ($color -eq [System.Drawing.Color]::Crimson) { $color } else { Get-RiskColor $weeklyPct }
+            $weeklyColor = Get-RiskColor $weeklyPct
+            if ((Get-RiskRank $weeklyColor) -gt (Get-RiskRank $color)) { $color = $weeklyColor }
 
             $weeklyResetInfo = ""
             if ($json.seven_day.resets_at) {
